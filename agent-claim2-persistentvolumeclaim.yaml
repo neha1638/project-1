@@ -1,3 +1,34 @@
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: agent-sc2
+  labels:
+   io.kompose.service: agent-claim2
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: agent-pv2
+  labels:
+    io.kompose.service: agent-claim2
+spec:
+  storageClassName: agent-sc2
+  capacity:
+    storage: 200Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/hdfs"
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,6 +37,7 @@ metadata:
     io.kompose.service: agent-claim2
   name: agent-claim2
 spec:
+  storageClassName: agent-sc2
   accessModes:
     - ReadWriteOnce
   resources:
