@@ -1,11 +1,42 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: mlflow-sc0
+  labels:
+   io.kompose.service: mlflow-server
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mlflow-pv0
+  labels:
+    io.kompose.service: mlflow-server
+spec:
+  storageClassName: mlflow-sc0
+  capacity:
+    storage: 200Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/hdfs"
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: mlflow-server-claim0
+    io.kompose.service: mlflow-server
   name: mlflow-server-claim0
 spec:
+  storageClassName: mlflow-sc0
   accessModes:
     - ReadWriteOnce
   resources:
