@@ -26,7 +26,7 @@ spec:
         io.kompose.service: evidently-service
     spec:
       containers:
-        - image: evidently_service
+        - image: neha2299/evidently_service
           name: evidently-service
           ports:
             - containerPort: 8085
