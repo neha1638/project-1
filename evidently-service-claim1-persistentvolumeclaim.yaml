@@ -1,11 +1,42 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: evidently-service-sc1
+  labels:
+   io.kompose.service: evidently-service-claim
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: evidently-service-pv1
+  labels:
+    io.kompose.service: evidently-service-claim
+spec:
+  storageClassName: evidently-service-sc1
+  capacity:
+    storage: 200Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/hdfs"
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: evidently-service-claim1
+    io.kompose.service: evidently-service-claim
   name: evidently-service-claim1
 spec:
+  storageClassName: evidently-service-sc1
   accessModes:
     - ReadWriteOnce
   resources:
