@@ -33,7 +33,7 @@ spec:
               value: /tmp/mlreports
             - name: REPORT_TIME_WINDOW_MINUTES
               value: "180"
-          image: prefect_agent_1
+          image: neha2299/prefect_agent_1
           name: prefect-agent-1
           resources: {}
           volumeMounts:
