@@ -20,7 +20,7 @@ metadata:
   labels:
     io.kompose.service: agent-claim
 spec:
-  storageClassName: agent-sc
+  storageClassName: agent-sc0
   capacity:
     storage: 200Mi
   accessModes:
@@ -33,7 +33,7 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: agent-claim0
+    io.kompose.service: agent-claim
   name: agent-claim0
 spec:
   storageClassName: agent-sc0
