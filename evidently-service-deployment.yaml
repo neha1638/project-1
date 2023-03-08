@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: evidently-service
+  name: evidently-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: evidently-service
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: evidently-service
+    spec:
+      containers:
+        - image: evidently_service
+          name: evidently-service
+          ports:
+            - containerPort: 8085
+          resources: {}
+          volumeMounts:
+            - mountPath: /app/datasets
+              name: evidently-service-claim0
+            - mountPath: /app/config.yaml
+              name: evidently-service-claim1
+      restartPolicy: Always
+      volumes:
+        - name: evidently-service-claim0
+          persistentVolumeClaim:
+            claimName: evidently-service-claim0
+        - name: evidently-service-claim1
+          persistentVolumeClaim:
+            claimName: evidently-service-claim1
+status: {}

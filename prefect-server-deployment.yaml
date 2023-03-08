@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: prefect-server
+  name: prefect-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: prefect-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: prefect-server
+    spec:
+      containers:
+        - image: prefect_server
+          name: prefect-server
+          ports:
+            - containerPort: 4200
+            - containerPort: 8080
+          resources: {}
+          volumeMounts:
+            - mountPath: /tmp/mlopsdb
+              name: prefect-server-claim0
+            - mountPath: /tmp/mlopsartifacts
+              name: prefect-server-claim1
+            - mountPath: /tmp/store
+              name: prefect-server-claim2
+      restartPolicy: Always
+      volumes:
+        - name: prefect-server-claim0
+          persistentVolumeClaim:
+            claimName: prefect-server-claim0
+        - name: prefect-server-claim1
+          persistentVolumeClaim:
+            claimName: prefect-server-claim1
+        - name: prefect-server-claim2
+          persistentVolumeClaim:
+            claimName: prefect-server-claim2
+status: {}

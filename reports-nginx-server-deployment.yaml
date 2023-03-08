@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: reports-nginx-server
+  name: reports-nginx-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: reports-nginx-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.service: reports-nginx-server
+    spec:
+      containers:
+        - image: reports_nginx_server
+          name: reports-nginx-server
+          ports:
+            - containerPort: 8888
+          resources: {}
+          volumeMounts:
+            - mountPath: /tmp/mlreports
+              name: reports-nginx-server-claim0
+      restartPolicy: Always
+      volumes:
+        - name: reports-nginx-server-claim0
+          persistentVolumeClaim:
+            claimName: reports-nginx-server-claim0
+status: {}

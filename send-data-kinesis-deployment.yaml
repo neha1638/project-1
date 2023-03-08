@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: send-data-kinesis
+  name: send-data-kinesis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: send-data-kinesis
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/external: "true"
+        io.kompose.service: send-data-kinesis
+    spec:
+      containers:
+        - env:
+            - name: KINESIS_ADDRESS
+              value: http://aws:4566
+          image: send_data-kinesis
+          name: send-data-kinesis
+          resources: {}
+      restartPolicy: Always
+status: {}

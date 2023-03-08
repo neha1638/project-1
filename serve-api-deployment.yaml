@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: serve-api
+  name: serve-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: serve-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/backend: "true"
+        io.kompose.network/external: "true"
+        io.kompose.service: serve-api
+    spec:
+      containers:
+        - env:
+            - name: EVIDENTLY_SERVICE
+              value: http://evidently_service.:8085
+            - name: MLFLOW_ADDRESS
+              value: http://mlflow_server:5050
+            - name: MONGODB_ADDRESS
+              value: mongodb://mongo:27017/
+          image: serve-api
+          name: serve-api
+          ports:
+            - containerPort: 9696
+          resources: {}
+          volumeMounts:
+            - mountPath: /tmp/mlopsdb
+              name: serve-api-claim0
+            - mountPath: /tmp/mlopsartifacts
+              name: serve-api-claim1
+            - mountPath: /tmp/store
+              name: serve-api-claim2
+            - mountPath: /tmp/serve
+              name: serve-api-claim3
+      restartPolicy: Always
+      volumes:
+        - name: serve-api-claim0
+          persistentVolumeClaim:
+            claimName: serve-api-claim0
+        - name: serve-api-claim1
+          persistentVolumeClaim:
+            claimName: serve-api-claim1
+        - name: serve-api-claim2
+          persistentVolumeClaim:
+            claimName: serve-api-claim2
+        - name: serve-api-claim3
+          persistentVolumeClaim:
+            claimName: serve-api-claim3
+status: {}
