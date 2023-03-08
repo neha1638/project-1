@@ -1,11 +1,42 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: prometheus-sc1
+  labels:
+   io.kompose.service: prometheus
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-pv1
+  labels:
+    io.kompose.service: prometheus
+spec:
+  storageClassName: prometheus-sc1
+  capacity:
+    storage: 200Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/hdfs"
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: prometheus-claim1
+    io.kompose.service: prometheus
   name: prometheus-claim1
 spec:
+  storageClassName: prometheus-sc1
   accessModes:
     - ReadWriteOnce
   resources:
