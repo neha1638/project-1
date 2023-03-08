@@ -6,8 +6,9 @@ metadata:
     io.kompose.service: agent-claim1
   name: agent-claim1
 spec:
+  storageClassName: agent-sc
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 100Mi
