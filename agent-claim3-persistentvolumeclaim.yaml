@@ -1,3 +1,33 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: agent-sc3
+  labels:
+   io.kompose.service: agent-claim3
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: agent-pv3
+  labels:
+    io.kompose.service: agent-claim3
+spec:
+  storageClassName: agent-sc3
+  capacity:
+    storage: 200Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/hdfs"
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -6,6 +36,7 @@ metadata:
     io.kompose.service: agent-claim3
   name: agent-claim3
 spec:
+  storageClassName: agent-sc3
   accessModes:
     - ReadWriteOnce
   resources:
