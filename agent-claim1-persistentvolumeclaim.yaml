@@ -1,12 +1,9 @@
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
-  name: agent-sc
+  name: agent-sc1
   labels:
-   io.kompose.service: agent-claim0
    io.kompose.service: agent-claim1
-   io.kompose.service: agent-claim2
-   io.kompose.service: agent-claim3
 provisioner: kubernetes.io/aws-ebs
 parameters:
   type: gp2
@@ -19,18 +16,15 @@ volumeBindingMode: Immediate
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: agent-pv
+  name: agent-pv1
   labels:
-    io.kompose.service: agent-claim0
     io.kompose.service: agent-claim1
-    io.kompose.service: agent-claim2
-    io.kompose.service: agent-claim3
 spec:
-  storageClassName: agent-sc
+  storageClassName: agent-sc1
   capacity:
     storage: 200Mi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   hostPath:
     path: "/hdfs"
 ---
@@ -39,12 +33,12 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: agent-claim0
+    io.kompose.service: agent-claim1
   name: agent-claim1
 spec:
-  storageClassName: agent-sc
+  storageClassName: agent-sc1
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 100Mi
