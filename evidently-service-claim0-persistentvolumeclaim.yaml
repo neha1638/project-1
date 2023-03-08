@@ -3,7 +3,7 @@ kind: StorageClass
 metadata:
   name: evidently-service-sc0
   labels:
-   io.kompose.service: evidently-service-claim0
+   io.kompose.service: evidently-service-claim
 provisioner: kubernetes.io/aws-ebs
 parameters:
   type: gp2
@@ -18,7 +18,7 @@ kind: PersistentVolume
 metadata:
   name: evidently-service-pv
   labels:
-    io.kompose.service: evidently-service-claim0
+    io.kompose.service: evidently-service-claim
 spec:
   storageClassName: evidently-service-sc0
   capacity:
@@ -33,7 +33,7 @@ kind: PersistentVolumeClaim
 metadata:
   creationTimestamp: null
   labels:
-    io.kompose.service: evidently-service-claim0
+    io.kompose.service: evidently-service-claim
   name: evidently-service-claim0
 spec:
   storageClassName: evidently-service-sc0
